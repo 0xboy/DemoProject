@@ -1,0 +1,127 @@
+<div class="container">
+  <h2>Kartlar</h2>
+  
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h3>Yeni Kart Ekle</h3>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="createCard()">
+        <div class="mb-3">
+          <label for="title" class="form-label">Başlık</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="title" 
+            name="title" 
+            [(ngModel)]="newCard.title" 
+            required
+          >
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Açıklama</label>
+          <textarea 
+            class="form-control" 
+            id="description" 
+            name="description" 
+            [(ngModel)]="newCard.description" 
+            rows="3" 
+            required
+          ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Kart Ekle
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="loading && !cards.length" class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Yükleniyor...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!cards.length && !loading" class="alert alert-info">
+    Henüz kart bulunmamaktadır.
+  </div>
+
+  <div class="row">
+    <div *ngFor="let card of cards" class="col-md-4 mb-3">
+      <div class="card h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0">{{ card.title }}</h5>
+          <div>
+            <button class="btn btn-sm btn-outline-primary me-2" (click)="startEditing(card)">
+              <i class="bi bi-pencil-square"></i> Düzenle
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="deleteCard(card.id)">
+              <i class="bi bi-trash"></i> Sil
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ card.description }}</p>
+        </div>
+        <div class="card-footer text-muted">
+          Oluşturulma: {{ card.createdDate | date:'dd.MM.yyyy HH:mm' }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Düzenleme Modalı -->
+  <div *ngIf="editingCardId !== null" class="modal-backdrop show"></div>
+  <div *ngIf="editingCardId !== null" class="modal d-block" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Kart Düzenle</h5>
+          <button type="button" class="btn-close" (click)="cancelEditing()"></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="updateCard()">
+            <div class="mb-3">
+              <label for="editTitle" class="form-label">Başlık</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="editTitle" 
+                name="editTitle" 
+                [(ngModel)]="editingCard.title" 
+                required
+              >
+            </div>
+            <div class="mb-3">
+              <label for="editDescription" class="form-label">Açıklama</label>
+              <textarea 
+                class="form-control" 
+                id="editDescription" 
+                name="editDescription" 
+                [(ngModel)]="editingCard.description" 
+                rows="3" 
+                required
+              ></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="cancelEditing()">İptal</button>
+              <button type="submit" class="btn btn-primary" [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Kaydet
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
