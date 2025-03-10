@@ -23,7 +23,8 @@ builder.Services.AddCors(options =>
         builder => builder
             .WithOrigins("http://localhost:4200")
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,6 +43,8 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAngularApp");
 
+// Kimlik doğrulama middleware'ini ekleyin
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

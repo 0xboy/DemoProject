@@ -1,0 +1,68 @@
+<div class="card-list-container">
+  <div class="card-list-header">
+    <h3>Kartlarınız</h3>
+    <button class="add-card-btn" (click)="toggleAddCard()">
+      {{ isAddingCard ? 'İptal' : 'Yeni Kart Ekle' }}
+    </button>
+  </div>
+
+  <div class="add-card-form" *ngIf="isAddingCard">
+    <div class="form-group">
+      <label for="newTitle">Başlık</label>
+      <input 
+        type="text" 
+        id="newTitle" 
+        name="title" 
+        [(ngModel)]="newCard.title" 
+        placeholder="Kart başlığı"
+        required
+      >
+    </div>
+    
+    <div class="form-group">
+      <label for="newDescription">Açıklama</label>
+      <textarea 
+        id="newDescription" 
+        name="description" 
+        [(ngModel)]="newCard.description" 
+        placeholder="Kart açıklaması"
+        rows="3"
+      ></textarea>
+    </div>
+    
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="add-btn" 
+        [disabled]="!newCard.title.trim() || isLoading" 
+        (click)="addCard()"
+      >
+        <span *ngIf="!isLoading">Ekle</span>
+        <span *ngIf="isLoading">Ekleniyor...</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="loading-indicator" *ngIf="isLoading && !isAddingCard">
+    Kartlar yükleniyor...
+  </div>
+
+  <div class="empty-state" *ngIf="cards.length === 0 && !isLoading">
+    <p>Henüz kart eklenmemiş.</p>
+    <button class="add-card-btn" (click)="toggleAddCard()" *ngIf="!isAddingCard">
+      Yeni Kart Ekle
+    </button>
+  </div>
+
+  <div class="card-list" *ngIf="cards.length > 0">
+    <app-card-item 
+      *ngFor="let card of cards" 
+      [card]="card"
+      (onDelete)="deleteCard($event)"
+    ></app-card-item>
+  </div>
+</div> 

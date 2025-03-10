@@ -1,0 +1,22 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Kart Yönetim Uygulaması</h1>
+    <button class="logout-btn" (click)="logout()">Çıkış Yap</button>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="welcome-message">
+      <h2>Hoş Geldiniz!</h2>
+      <p>Kart yönetim uygulamasına başarıyla giriş yaptınız.</p>
+    </div>
+
+    <div class="card-section">
+      <h3 class="section-title">Kartlarınız</h3>
+      <app-card-list id="personal-cards"></app-card-list>
+    </div>
+  </main>
+
+  <footer class="dashboard-footer">
+    <p>&copy; 2024 Kart Yönetim Uygulaması</p>
+  </footer>
+</div> 
